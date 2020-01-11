@@ -23,8 +23,9 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  XboxController controller = new XboxController(0);
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final SubsystemDrive m_subsystemDrive = new SubsystemDrive();
+  private final SubsystemDrive m_subsystemDrive = new SubsystemDrive(controller);
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final CommandDrive m_commandDrive = new CommandDrive(m_subsystemDrive);
 
@@ -36,7 +37,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_subsystemDrive.setDefaultCommand(m_commandDrive);
   }
 
   /**
@@ -57,5 +57,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
+  }
+
+  public Command getTeleoperatedCommand() {
+    return m_commandDrive;
   }
 }

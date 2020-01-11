@@ -10,18 +10,21 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class SubsystemDrive extends SubsystemBase {
 
+  XboxController controller;
   MecanumDrive mecanumDrive;
 
   /**
    * Creates a new Drive.
    */
-  public SubsystemDrive() {
+  public SubsystemDrive(XboxController controller) {
+    this.controller = controller;
     mecanumDrive = new MecanumDrive(
       new CANSparkMax(Constants.PORT_MOTOR_DRIVE_FRONTLEFT, MotorType.kBrushless),
       new CANSparkMax(Constants.PORT_MOTOR_DRIVE_REARLEFT, MotorType.kBrushless),
@@ -35,7 +38,6 @@ public class SubsystemDrive extends SubsystemBase {
   }
 
   public void drive() {
-    mecanumDrive.driveCartesian(0.2, 0, 0);
-    //mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation);
+    mecanumDrive.driveCartesian(controller.getRawAxis(0), controller.getRawAxis(1), controller.getRawAxis(4));
   }
 }
