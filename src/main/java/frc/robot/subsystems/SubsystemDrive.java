@@ -7,18 +7,35 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class SubsystemDrive extends SubsystemBase {
+
+  MecanumDrive mecanumDrive;
+
   /**
    * Creates a new Drive.
    */
   public SubsystemDrive() {
-
+    mecanumDrive = new MecanumDrive(
+      new CANSparkMax(Constants.PORT_MOTOR_DRIVE_FRONTLEFT, MotorType.kBrushless),
+      new CANSparkMax(Constants.PORT_MOTOR_DRIVE_REARLEFT, MotorType.kBrushless),
+      new CANSparkMax(Constants.PORT_MOTOR_DRIVE_FRONTRIGHT, MotorType.kBrushless),
+      new CANSparkMax(Constants.PORT_MOTOR_DRIVE_REARRIGHT, MotorType.kBrushless));
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void drive() {
+    mecanumDrive.driveCartesian(0.2, 0, 0);
+    //mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation);
   }
 }
