@@ -41,7 +41,7 @@ public class SubsystemDrive extends SubsystemBase {
 
   public void drive() {
     double ySpeed = getDeadzonedInput(controller.getRawAxis(0));
-    double xSpeed = getDeadzonedInput(controller.getRawAxis(1));
+    double xSpeed = getDeadzonedInput(-controller.getRawAxis(1));
     double zRotation = getDeadzonedInput(controller.getRawAxis(4));
 
     mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation);
