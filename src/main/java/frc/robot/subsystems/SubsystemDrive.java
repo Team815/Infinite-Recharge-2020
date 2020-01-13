@@ -17,6 +17,8 @@ import frc.robot.Constants;
 
 public class SubsystemDrive extends SubsystemBase {
 
+  private static final double DEADZONE_THRESHOLD = 0.1;
+
   XboxController controller;
   MecanumDrive mecanumDrive;
 
@@ -38,6 +40,14 @@ public class SubsystemDrive extends SubsystemBase {
   }
 
   public void drive() {
-    mecanumDrive.driveCartesian(controller.getRawAxis(0), controller.getRawAxis(1), controller.getRawAxis(4));
+    double ySpeed = getDeadzonedInput(controller.getRawAxis(0));
+    double xSpeed = getDeadzonedInput(controller.getRawAxis(1));
+    double zRotation = getDeadzonedInput(controller.getRawAxis(4));
+
+    mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation);
+  }
+
+  private static double getDeadzonedInput(double input) {
+    return Math.abs(input) < DEADZONE_THRESHOLD ? 0 : input;
   }
 }
