@@ -9,8 +9,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -20,35 +18,27 @@ public class SubsystemDrive extends SubsystemBase {
   private static final double DEADZONE_THRESHOLD = 0.1;
   private static final double ACCELERATION_MAX = 0.01;
 
-  XboxController controller;
-  MecanumDrive mecanumDrive;
-  double xSpeed = 0;
-  double ySpeed = 0;
-  double zRotation = 0;
+  double m_speedHorizontal = 0;
+  double m_speedVertical = 0;
+  double m_speedRotational = 0;
 
-  /**
-   * Creates a new Drive.
-   */
-  public SubsystemDrive(XboxController controller) {
-    this.controller = controller;
-    mecanumDrive = new MecanumDrive(
-      new CANSparkMax(Constants.PORT_MOTOR_DRIVE_FRONTLEFT, MotorType.kBrushless),
-      new CANSparkMax(Constants.PORT_MOTOR_DRIVE_REARLEFT, MotorType.kBrushless),
-      new CANSparkMax(Constants.PORT_MOTOR_DRIVE_FRONTRIGHT, MotorType.kBrushless),
-      new CANSparkMax(Constants.PORT_MOTOR_DRIVE_REARRIGHT, MotorType.kBrushless));
-  }
+  MecanumDrive mecanumDrive = new MecanumDrive(
+    new CANSparkMax(Constants.PORT_MOTOR_DRIVE_FRONTLEFT, MotorType.kBrushless),
+    new CANSparkMax(Constants.PORT_MOTOR_DRIVE_REARLEFT, MotorType.kBrushless),
+    new CANSparkMax(Constants.PORT_MOTOR_DRIVE_FRONTRIGHT, MotorType.kBrushless),
+    new CANSparkMax(Constants.PORT_MOTOR_DRIVE_REARRIGHT, MotorType.kBrushless));
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
 
-  public void drive() {
-    ySpeed = calculateOuput(controller.getRawAxis(0), ySpeed);
-    xSpeed = calculateOuput(-controller.getRawAxis(1), xSpeed);
-    zRotation = calculateOuput(controller.getRawAxis(4), zRotation);
+  public void drive(double speedHorizontal, double speedVertical, double speedRotational) {
+    m_speedHorizontal = calculateOuput(speedHorizontal, m_speedHorizontal);
+    m_speedVertical = calculateOuput(speedVertical, m_speedVertical);
+    m_speedRotational = calculateOuput(speedRotational, m_speedRotational);
 
-    mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation);
+    mecanumDrive.driveCartesian(m_speedHorizontal, m_speedVertical, m_speedRotational);
   }
 
   private static double calculateOuput(double input, double currentOutput) {
@@ -63,6 +53,4 @@ public class SubsystemDrive extends SubsystemBase {
 
     return nextOutput;
   }
-
-
 }
