@@ -43,14 +43,9 @@ public class SubsystemDrive extends SubsystemBase {
 
   private static double calculateOuput(double input, double currentOutput) {
     input = Math.abs(input) < DEADZONE_THRESHOLD ? 0 : input;
-
-    double nextOutput = currentOutput;
-    if (Math.abs(input - currentOutput) < ACCELERATION_MAX) {
-      nextOutput = input;
-    } else {
-      nextOutput += input > currentOutput ? ACCELERATION_MAX : -ACCELERATION_MAX;
-    }
-
-    return nextOutput;
+    double difference = input - currentOutput;
+    difference = Math.min(difference, ACCELERATION_MAX);
+    difference = Math.max(difference, -ACCELERATION_MAX);
+    return currentOutput + difference;
   }
 }
