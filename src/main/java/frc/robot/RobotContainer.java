@@ -31,7 +31,7 @@ public class RobotContainer {
   private final CommandDrive m_commandDrive = new CommandDrive(
     m_subsystemDrive,
     () -> m_controller.getX(Hand.kLeft),
-    () -> m_controller.getY(Hand.kLeft),
+    () -> -m_controller.getY(Hand.kLeft),
     () -> m_controller.getX(Hand.kRight));
 
 
