@@ -16,8 +16,34 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int PORT_MOTOR_DRIVE_FRONTLEFT = 4;
-    public static final int PORT_MOTOR_DRIVE_REARLEFT = 3;
-    public static final int PORT_MOTOR_DRIVE_FRONTRIGHT = 2;
-    public static final int PORT_MOTOR_DRIVE_REARRIGHT = 1;
+
+    // Drivetrain motor ports
+
+    public static final int MOTOR_DRIVE_REAR_RIGHT = 1;
+    public static final int MOTOR_DRIVE_FRONT_RIGHT = 2;
+    public static final int MOTOR_DRIVE_REAR_LEFT = 3;
+    public static final int MOTOR_DRIVE_FRONT_LEFT = 4;
+
+    // XBox controller mappings
+
+    public static final int CONTROLLER_BUTTON_A = 1;
+    public static final int CONTROLLER_BUTTON_B = 2;
+    public static final int CONTROLLER_BUTTON_X = 3;
+    public static final int CONTROLLER_BUTTON_Y = 4;
+    public static final int CONTROLLER_BUTTON_BUMPER_LEFT = 5;
+    public static final int CONTROLLER_BUTTON_BUMPER_RIGHT = 6;
+    public static final int CONTROLLER_BUTTON_SELECT = 7;
+    public static final int CONTROLLER_BUTTON_START = 8;
+    public static final int CONTROLLER_BUTTON_STICK_LEFT = 9;
+    public static final int CONTROLLER_BUTTON_STICK_RIGHT = 10;
+
+    public static final int CONTROLLER_DPAD_NONE = -1;
+    public static final int CONTROLLER_DPAD_UP = 0;
+    public static final int CONTROLLER_DPAD_UP_RIGHT = 45;
+    public static final int CONTROLLER_DPAD_RIGHT = 90;
+    public static final int CONTROLLER_DPAD_DOWN_RIGHT = 135;
+    public static final int CONTROLLER_DPAD_DOWN = 180;
+    public static final int CONTROLLER_DPAD_DOWN_LEFT = 225;
+    public static final int CONTROLLER_DPAD_LEFT = 270;
+    public static final int CONTROLLER_DPAD_UP_LEFT = 315;
 }

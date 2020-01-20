@@ -23,10 +23,10 @@ public class SubsystemDrive extends SubsystemBase {
   double m_speedRotational = 0;
 
   MecanumDrive mecanumDrive = new MecanumDrive(
-    new CANSparkMax(Constants.PORT_MOTOR_DRIVE_FRONTLEFT, MotorType.kBrushless),
-    new CANSparkMax(Constants.PORT_MOTOR_DRIVE_REARLEFT, MotorType.kBrushless),
-    new CANSparkMax(Constants.PORT_MOTOR_DRIVE_FRONTRIGHT, MotorType.kBrushless),
-    new CANSparkMax(Constants.PORT_MOTOR_DRIVE_REARRIGHT, MotorType.kBrushless));
+    new CANSparkMax(Constants.MOTOR_DRIVE_FRONT_LEFT, MotorType.kBrushless),
+    new CANSparkMax(Constants.MOTOR_DRIVE_REAR_LEFT, MotorType.kBrushless),
+    new CANSparkMax(Constants.MOTOR_DRIVE_FRONT_RIGHT, MotorType.kBrushless),
+    new CANSparkMax(Constants.MOTOR_DRIVE_REAR_RIGHT, MotorType.kBrushless));
 
   @Override
   public void periodic() {
