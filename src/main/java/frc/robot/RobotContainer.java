@@ -7,13 +7,14 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.commands.CommandChangeMotorSpeed;
 import frc.robot.commands.CommandDrive;
-import frc.robot.commands.CommandStartShoot;
-import frc.robot.commands.CommandStopShoot;
+import frc.robot.commands.CommandShoot;
 import frc.robot.subsystems.SubsystemDrive;
 import frc.robot.subsystems.SubsystemShooter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,19 +30,19 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final XboxController m_controller = new XboxController(0);
-  private final SubsystemDrive m_subsystemDrive = new SubsystemDrive();
+  //private final SubsystemDrive m_subsystemDrive = new SubsystemDrive();
   private final SubsystemShooter m_subsystemShooter = new SubsystemShooter();
-  private final CommandDrive m_commandDrive = new CommandDrive(
+  /*private final CommandDrive m_commandDrive = new CommandDrive(
     m_subsystemDrive,
     () -> m_controller.getX(Hand.kLeft),
     () -> -m_controller.getY(Hand.kLeft),
-    () -> m_controller.getX(Hand.kRight));
+    () -> m_controller.getX(Hand.kRight));*/
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_subsystemDrive.setDefaultCommand(m_commandDrive);
+    //m_subsystemDrive.setDefaultCommand(m_commandDrive);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -54,6 +55,9 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    final TriggerButton triggerLeft = new TriggerButton(() -> m_controller.getTriggerAxis(Hand.kLeft));
+    final TriggerButton triggerRight = new TriggerButton(() -> m_controller.getTriggerAxis(Hand.kRight));
+
     final JoystickButton buttonA = new JoystickButton(m_controller, Constants.CONTROLLER_BUTTON_A);
     final JoystickButton buttonB = new JoystickButton(m_controller, Constants.CONTROLLER_BUTTON_B);
     final JoystickButton buttonX = new JoystickButton(m_controller, Constants.CONTROLLER_BUTTON_X);
@@ -75,8 +79,7 @@ public class RobotContainer {
     final POVButton dpadRight = new POVButton(m_controller, Constants.CONTROLLER_DPAD_RIGHT);
     final POVButton dpadUpRight = new POVButton(m_controller, Constants.CONTROLLER_DPAD_UP_RIGHT);
 
-    buttonA.whenPressed(new CommandStartShoot(m_subsystemShooter));
-    buttonB.whenPressed(new CommandStopShoot(m_subsystemShooter));
+    triggerRight.whenHeld(new CommandShoot(m_subsystemShooter));
     dpadUp.whenPressed(new CommandChangeMotorSpeed(true, m_subsystemShooter));
     dpadDown.whenPressed(new CommandChangeMotorSpeed(false, m_subsystemShooter));
   }

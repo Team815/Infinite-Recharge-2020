@@ -24,7 +24,7 @@ public final class Constants {
     public static final int MOTOR_DRIVE_REAR_LEFT = 3;
     public static final int MOTOR_DRIVE_FRONT_LEFT = 4;
 
-    // XBox controller mappings
+    // Xbox controller mappings
 
     public static final int CONTROLLER_BUTTON_A = 1;
     public static final int CONTROLLER_BUTTON_B = 2;
@@ -46,4 +46,12 @@ public final class Constants {
     public static final int CONTROLLER_DPAD_DOWN_LEFT = 225;
     public static final int CONTROLLER_DPAD_LEFT = 270;
     public static final int CONTROLLER_DPAD_UP_LEFT = 315;
+
+    public static final int CONTROLLER_STICK_LEFT_X = 0;
+    public static final int CONTROLLER_STICK_LEFT_Y = 1;
+    public static final int CONTROLLER_STICK_RIGHT_X = 4;
+    public static final int CONTROLLER_STICK_RIGHT_Y = 5;
+
+    public static final int CONTROLLER_TRIGGER_LEFT = 2;
+    public static final int CONTROLLER_TRIGGER_RIGHT = 3;
 }

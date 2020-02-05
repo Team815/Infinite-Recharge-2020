@@ -12,7 +12,7 @@ import frc.robot.subsystems.SubsystemShooter;
 
 public class CommandChangeMotorSpeed extends CommandBase {
 
-  private final double SPEED_STEP = 0.1;
+  private final double SPEED_STEP = 0.01;
 
   boolean m_speedUp;
   SubsystemShooter m_shooter;
@@ -23,8 +23,6 @@ public class CommandChangeMotorSpeed extends CommandBase {
   public CommandChangeMotorSpeed(boolean speedUp, SubsystemShooter shooter) {
     m_speedUp = speedUp;
     m_shooter = shooter;
-    addRequirements(shooter);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.

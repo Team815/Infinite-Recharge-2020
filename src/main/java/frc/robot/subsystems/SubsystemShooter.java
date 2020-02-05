@@ -16,28 +16,33 @@ public class SubsystemShooter extends SubsystemBase {
 
   private TalonSRX m_talon1 = new TalonSRX(30);
   private TalonSRX m_talon2 = new TalonSRX(31);
-  private double m_speed = 0.2;
+  private double m_speed = 20000;
   private boolean m_running = false;
+  private boolean m_readyToFire = false;
 
   /**
    * Creates a new SubsystemShooter.
    */
   public SubsystemShooter() {
     m_talon2.setInverted(true);
+    m_talon1.set(ControlMode.Follower, 31);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    if (m_running) {
+      //System.out.println(m_speed);
+      //m_speed = NetworkTableInstance.getDefault().getTable("data").getEntry("speedShooter").getNumber(0.2).doubleValue() / 100;
+      set(m_speed);
+    }
   }
 
   public void changeMotorSpeedBy(double speedChange) {
     m_speed += speedChange;
     m_speed = Math.max(0, m_speed);
     m_speed = Math.min(1, m_speed);
-    if (m_running) {
+    if (m_running)
       set(m_speed);
-    }
   }
 
   public void start() {
@@ -46,12 +51,12 @@ public class SubsystemShooter extends SubsystemBase {
   }
 
   public void stop() {
-    set(0);
+    m_talon2.set(ControlMode.PercentOutput, 0);
     m_running = false;
   }
 
   private void set(double speed) {
-    m_talon1.set(ControlMode.PercentOutput, speed);
-    m_talon2.set(ControlMode.PercentOutput, speed);
+    m_talon2.set(ControlMode.Velocity, speed);
+    System.out.println("Target speed: " + speed + ", Sensed speed: " + m_talon2.getSelectedSensorVelocity());
   }
 }
