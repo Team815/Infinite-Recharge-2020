@@ -54,4 +54,16 @@ public final class Constants {
 
     public static final int CONTROLLER_TRIGGER_LEFT = 2;
     public static final int CONTROLLER_TRIGGER_RIGHT = 3;
+
+    public static final int MOTOR_BALL_MOVER_0 = 10;
+    public static final int MOTOR_BALL_MOVER_1 = 11;
+    public static final int MOTOR_BALL_MOVER_2 = 12;
+    public static final int MOTOR_BALL_MOVER_3 = 13;
+    public static final int MOTOR_BALL_MOVER_4 = 14;
+
+    public static final int SENSOR_BALL_MOVER_0 = 0;
+    public static final int SENSOR_BALL_MOVER_1 = 1;
+    public static final int SENSOR_BALL_MOVER_2 = 2;
+    public static final int SENSOR_BALL_MOVER_3 = 3;
+    public static final int SENSOR_BALL_MOVER_4 = 4;
 }
