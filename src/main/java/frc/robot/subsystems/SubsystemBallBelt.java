@@ -26,15 +26,24 @@ public class SubsystemBallBelt extends SubsystemBase {
     TalonSRX motor3 = new TalonSRX(Constants.MOTOR_BALL_MOVER_3);
     TalonSRX motor4 = new TalonSRX(Constants.MOTOR_BALL_MOVER_4);
 
+    motor0.setInverted(true);
+    motor1.setInverted(true);
+    motor2.setInverted(true);
+    motor3.setInverted(true);
+
     m_ballMoveGroups[0] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_0, motor0, motor1);
-    m_ballMoveGroups[1] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_0, motor1, motor2);
-    m_ballMoveGroups[2] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_0, motor2, motor3);
-    m_ballMoveGroups[3] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_0, motor3, motor4);
-    m_ballMoveGroups[4] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_0, motor4);
+    m_ballMoveGroups[1] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_1, motor1, motor2);
+    m_ballMoveGroups[2] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_2, motor2, motor3);
+    m_ballMoveGroups[3] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_3, motor3, motor4);
+    m_ballMoveGroups[4] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_4, motor4);
   }
 
-  @Override
-  public void periodic() {
+  public void run() {
+    String sensorReads = "";
+    for (BallMoveGroup ballGroup : m_ballMoveGroups) {
+      sensorReads += ballGroup.seesBall() + " ";
+    }
+    System.out.println(sensorReads);
     for(int i = 0; i < m_ballMoveGroups.length; i++) {
       BallMoveGroup ballMoveGroup = m_ballMoveGroups[i];
       boolean run = false;

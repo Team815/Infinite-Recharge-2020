@@ -45,7 +45,7 @@ public class BallMoveGroup {
             m_state = State.RUNNING;
             m_timer.stop();
             m_timer.reset();
-            set(0.1);
+            set(0.2);
         }
     }
 

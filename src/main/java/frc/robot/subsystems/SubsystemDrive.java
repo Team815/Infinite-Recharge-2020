@@ -21,12 +21,14 @@ public class SubsystemDrive extends SubsystemBase {
   double m_speedHorizontal = 0;
   double m_speedVertical = 0;
   double m_speedRotational = 0;
+  CANSparkMax motor = new CANSparkMax(Constants.MOTOR_DRIVE_REAR_RIGHT, MotorType.kBrushless);
 
+  /*
   MecanumDrive mecanumDrive = new MecanumDrive(
     new CANSparkMax(Constants.MOTOR_DRIVE_FRONT_LEFT, MotorType.kBrushless),
     new CANSparkMax(Constants.MOTOR_DRIVE_REAR_LEFT, MotorType.kBrushless),
     new CANSparkMax(Constants.MOTOR_DRIVE_FRONT_RIGHT, MotorType.kBrushless),
-    new CANSparkMax(Constants.MOTOR_DRIVE_REAR_RIGHT, MotorType.kBrushless));
+    new CANSparkMax(Constants.MOTOR_DRIVE_REAR_RIGHT, MotorType.kBrushless));*/
 
   @Override
   public void periodic() {
@@ -38,7 +40,8 @@ public class SubsystemDrive extends SubsystemBase {
     m_speedVertical = calculateOuput(speedVertical, m_speedVertical);
     m_speedRotational = calculateOuput(speedRotational, m_speedRotational);
 
-    mecanumDrive.driveCartesian(m_speedHorizontal, m_speedVertical, m_speedRotational);
+    motor.set(speedVertical);
+    //mecanumDrive.driveCartesian(m_speedHorizontal, m_speedVertical, m_speedRotational);
   }
 
   private static double calculateOuput(double input, double currentOutput) {
