@@ -19,10 +19,10 @@ public final class Constants {
 
     // Drivetrain motor ports
 
-    public static final int MOTOR_DRIVE_REAR_RIGHT = 1;
-    public static final int MOTOR_DRIVE_FRONT_RIGHT = 2;
-    public static final int MOTOR_DRIVE_REAR_LEFT = 3;
-    public static final int MOTOR_DRIVE_FRONT_LEFT = 4;
+    public static final int MOTOR_DRIVE_REAR_RIGHT = 11;
+    public static final int MOTOR_DRIVE_FRONT_RIGHT = 10;
+    public static final int MOTOR_DRIVE_REAR_LEFT = 9;
+    public static final int MOTOR_DRIVE_FRONT_LEFT = 8;
 
     // Xbox controller mappings
 
@@ -69,5 +69,5 @@ public final class Constants {
     public static final int SENSOR_BALL_MOVER_3 = 3;
     public static final int SENSOR_BALL_MOVER_4 = 4;
 
-    public static final int MOTOR_BALL_PICKUP_SPINNER = 7;
+    public static final int MOTOR_BALL_PICKUP_SPINNER = 12;
 }

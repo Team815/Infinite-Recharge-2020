@@ -35,7 +35,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final XboxController m_controller = new XboxController(0);
   private final SubsystemDrive m_subsystemDrive = new SubsystemDrive();
-  //private final SubsystemBallPickup m_subsystemBallPickup = new SubsystemBallPickup();
+  private final SubsystemBallPickup m_subsystemBallPickup = new SubsystemBallPickup();
   private final SubsystemBallBelt m_subsystemBallBelt = new SubsystemBallBelt();
   //private final SubsystemShooter m_subsystemShooter = new SubsystemShooter();
   private final CommandDrive m_commandDrive = new CommandDrive(
@@ -89,7 +89,7 @@ public class RobotContainer {
     //triggerRight.whenHeld(new CommandShoot(m_subsystemShooter));
     //dpadUp.whenPressed(new CommandChangeMotorSpeed(true, m_subsystemShooter));
     //dpadDown.whenPressed(new CommandChangeMotorSpeed(false, m_subsystemShooter));
-    //buttonA.whenHeld(new CommandStartBallSpinner(m_subsystemBallPickup));
+    triggerLeft.whenHeld(new CommandStartBallSpinner(m_subsystemBallPickup));
   }
 
 

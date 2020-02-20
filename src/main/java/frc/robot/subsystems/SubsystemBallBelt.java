@@ -28,7 +28,6 @@ public class SubsystemBallBelt extends SubsystemBase {
 
     motor0.setInverted(true);
     motor1.setInverted(true);
-    motor2.setInverted(true);
     motor3.setInverted(true);
 
     m_ballMoveGroups[0] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_0, motor0, motor1);
