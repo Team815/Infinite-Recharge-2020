@@ -42,15 +42,19 @@ public class SubsystemBallPickup extends SubsystemBase {
   public void periodic() {
   }
 
-  public void start() {
-    setSolendoids(Value.kForward);
-    setSpinner(0.5);
+  public void start() {    
+    if (SubsystemBallBelt.readyForBallPickup()) {
+      setSolendoids(Value.kForward);
+      setSpinner(0.35);
+      SubsystemBallBelt.startBallPickup();
+    }
   }
 
   public void stop() {
     System.out.println(Integer.toBinaryString(Solenoid.getAll(30)));
     setSolendoids(Value.kReverse);
     setSpinner(0);
+    SubsystemBallBelt.stopBallPickup();
   }
 
   private void setSpinner(double output){
