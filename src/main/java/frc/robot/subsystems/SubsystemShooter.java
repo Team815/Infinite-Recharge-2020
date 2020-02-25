@@ -11,11 +11,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class SubsystemShooter extends SubsystemBase {
 
-  private TalonSRX m_talon1 = new TalonSRX(30);
-  private TalonSRX m_talon2 = new TalonSRX(31);
+  private TalonSRX m_talon1 = new TalonSRX(Constants.MOTOR_BALL_SHOOTER_0);
+  private TalonSRX m_talon2 = new TalonSRX(Constants.MOTOR_BALL_SHOOTER_1);
+  private TalonSRX m_shooter_feeder = new TalonSRX(Constants.MOTOR_BALL_SHOOTER_FEEDER); 
   private double m_speed = 20000;
   private boolean m_running = false;
   private boolean m_readyToFire = false;
@@ -25,15 +27,23 @@ public class SubsystemShooter extends SubsystemBase {
    */
   public SubsystemShooter() {
     m_talon2.setInverted(true);
-    m_talon1.set(ControlMode.Follower, 31);
+    m_shooter_feeder.setInverted(true);
+    m_talon1.set(ControlMode.Follower, Constants.MOTOR_BALL_SHOOTER_1);
   }
 
   @Override
   public void periodic() {
+
     if (m_running) {
+
+      if (SubsystemBallBelt.readyToShoot() && readyToFire()) {
+        SubsystemBallBelt.startAssistBallShooter();
+        fireShooter();  //This will shoot the ball!
+      }
+
       //System.out.println(m_speed);
       //m_speed = NetworkTableInstance.getDefault().getTable("data").getEntry("speedShooter").getNumber(0.2).doubleValue() / 100;
-      set(m_speed);
+      setShooterVelocity(m_speed);
     }
   }
 
@@ -42,21 +52,46 @@ public class SubsystemShooter extends SubsystemBase {
     m_speed = Math.max(0, m_speed);
     m_speed = Math.min(1, m_speed);
     if (m_running)
-      set(m_speed);
+      setShooterVelocity(m_speed);
   }
 
   public void start() {
-    set(m_speed);
-    m_running = true;
+    if (SubsystemBallBelt.readyToShoot()) {
+      setShooterVelocity(m_speed);    
+      m_running = true;
+    }
   }
 
   public void stop() {
-    m_talon2.set(ControlMode.PercentOutput, 0);
+    SubsystemBallBelt.stopAssistBallShooter();
+    stopFiringShooter();
+    stopShooter();
     m_running = false;
   }
 
-  private void set(double speed) {
+  private void fireShooter() {
+    m_shooter_feeder.set(ControlMode.PercentOutput, 0.5);
+  }
+
+  private void stopFiringShooter() {
+    m_shooter_feeder.set(ControlMode.PercentOutput, 0);
+  }
+
+  private void stopShooter() {
+    m_talon2.set(ControlMode.PercentOutput, 0);
+  }
+
+  private void setShooterVelocity(double speed) {
     m_talon2.set(ControlMode.Velocity, speed);
     System.out.println("Target speed: " + speed + ", Sensed speed: " + m_talon2.getSelectedSensorVelocity());
+  }
+
+  private boolean readyToFire() {
+    if (m_talon2.getSelectedSensorVelocity() >= m_speed)
+      m_readyToFire = true; 
+    else 
+      m_readyToFire = false; 
+    
+    return m_readyToFire;
   }
 }

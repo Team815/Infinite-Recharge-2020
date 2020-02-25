@@ -17,11 +17,12 @@ public class SubsystemBallBelt extends SubsystemBase {
 
   private static BallMoveGroup[] m_ballMoveGroups = new BallMoveGroup[5];
   private static boolean m_pickingUpBall = false;
+  private static boolean m_shootingBall = false;
   private Timer m_timer;
 
   /**
-  * Use by SubsystemBallPickup to see if the subsystem is ready for another ball
-  * Returns true if first ball position is empty
+  * Use by SubsystemBallPickup to see if the BallBelt is ready for another ball.
+  * Returns true if first ball position is empty.
   */
   public static boolean readyForBallPickup() {
     if (!m_ballMoveGroups[0].seesBall()) {
@@ -32,7 +33,7 @@ public class SubsystemBallBelt extends SubsystemBase {
 
   /**
   * Use by SubsystemBallPickup to start Ball Pickup.
-  * Starts first ball position if it is empty
+  * Starts first ball position motor if it is empty.
   */
   public static void startBallPickup() {
     if (!m_ballMoveGroups[0].seesBall()) {
@@ -42,12 +43,43 @@ public class SubsystemBallBelt extends SubsystemBase {
   }
   
   /**
-  * Use by SubsystemBallPickup to stop Ball Pickup
-  * Stops first ball position if it is running
+  * Use by SubsystemBallPickup to stop Ball Pickup.
+  * Stops first ball position motor if it is running.
   */
   public static void stopBallPickup() {
     m_ballMoveGroups[0].stop();
     m_pickingUpBall = false;
+  }
+
+  /**
+  * Use by SubsystemShooter to see if the Ball Belt is ready to shoot.
+  * Returns true if last ball position has a ball.
+  */
+  public static boolean readyToShoot() {
+    if (m_ballMoveGroups[4].seesBall()) {
+      return true;
+    }    
+    return false;
+  }
+
+  /**
+  * Use by SubsystemShooter to assist Shooter.
+  * Starts last ball position motor if it has a ball.
+  */
+  public static void startAssistBallShooter() {
+    if (m_ballMoveGroups[4].seesBall()) {
+      m_shootingBall = true;
+      m_ballMoveGroups[4].start(); 
+    }    
+  }
+  
+  /**
+  * Use by SubsystemShooter to stop assisting Shooter.
+  * Stops last ball position motor if it is running.
+  */
+  public static void stopAssistBallShooter() {
+    m_ballMoveGroups[4].stop();
+    m_shootingBall = false;
   }
 
   /**
@@ -68,7 +100,7 @@ public class SubsystemBallBelt extends SubsystemBase {
     m_ballMoveGroups[1] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_1, motor1);//, motor2);
     m_ballMoveGroups[2] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_2, motor2);//, motor3);
     m_ballMoveGroups[3] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_3, motor3);//, motor4);
-    m_ballMoveGroups[3].setStoppingDuration(0.3); 
+    //m_ballMoveGroups[3].setStoppingDuration(0.3); 
     m_ballMoveGroups[4] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_4, motor4);
 
     m_timer = new Timer();
@@ -117,9 +149,9 @@ public class SubsystemBallBelt extends SubsystemBase {
             if (moveToPosition == -1)
               moveToPosition = j;        
           }              
-          else {            
-            ballMoveGroupInFrontOfMe.stop(); //Not sure if this line is needed
-          }
+          //else {            
+          //  ballMoveGroupInFrontOfMe.stop(); //Not sure if this line is needed
+          //}
         }
 
         //If there is an open ball group in front of currentBallGroup
@@ -130,7 +162,7 @@ public class SubsystemBallBelt extends SubsystemBase {
           
           //Use timer to make sure we don't loop forever
           m_timer.start();          
-          while (!m_ballMoveGroups[moveToPosition].seesBall() && m_timer.get() < 5);
+          while (!m_ballMoveGroups[moveToPosition].seesBall() && m_timer.get() < 1);
           m_timer.stop();
           m_timer.reset();
         }
@@ -142,13 +174,16 @@ public class SubsystemBallBelt extends SubsystemBase {
         
         //If currentBallGroup doesn't see a ball, stop it
         //But don't stop the first position if the robot is picking up a ball
-        if (i > 0 || !m_pickingUpBall)
+        if (i > 0 || (i == 0 && !m_pickingUpBall))
           currentBallGroup.stop();
 
         //Stop everything in front of currentBallGroup
+        //But don't stop the last ball position if the robot is shooting
         for (int j=lastPostion; j>i; j--) {
-          BallMoveGroup ballMoveGroupInFrontOfMe = m_ballMoveGroups[j];
-          ballMoveGroupInFrontOfMe.stop();
+          if ((j != lastPostion) || (j == lastPostion && !m_shootingBall)) {
+            BallMoveGroup ballMoveGroupInFrontOfMe = m_ballMoveGroups[j];
+            ballMoveGroupInFrontOfMe.stop();
+          }
         }
       }
     }     

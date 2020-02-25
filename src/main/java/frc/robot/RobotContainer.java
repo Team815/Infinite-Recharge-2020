@@ -37,7 +37,7 @@ public class RobotContainer {
   private final SubsystemDrive m_subsystemDrive = new SubsystemDrive();
   private final SubsystemBallPickup m_subsystemBallPickup = new SubsystemBallPickup();
   private final SubsystemBallBelt m_subsystemBallBelt = new SubsystemBallBelt();
-  //private final SubsystemShooter m_subsystemShooter = new SubsystemShooter();
+  private final SubsystemShooter m_subsystemShooter = new SubsystemShooter();
   private final CommandDrive m_commandDrive = new CommandDrive(
     m_subsystemDrive,
     () -> m_controller.getX(Hand.kLeft),
@@ -86,7 +86,7 @@ public class RobotContainer {
     final POVButton dpadRight = new POVButton(m_controller, Constants.CONTROLLER_DPAD_RIGHT);
     final POVButton dpadUpRight = new POVButton(m_controller, Constants.CONTROLLER_DPAD_UP_RIGHT);
 
-    //triggerRight.whenHeld(new CommandShoot(m_subsystemShooter));
+    triggerRight.whenHeld(new CommandShoot(m_subsystemShooter));
     //dpadUp.whenPressed(new CommandChangeMotorSpeed(true, m_subsystemShooter));
     //dpadDown.whenPressed(new CommandChangeMotorSpeed(false, m_subsystemShooter));
     triggerLeft.whenHeld(new CommandStartBallSpinner(m_subsystemBallPickup));

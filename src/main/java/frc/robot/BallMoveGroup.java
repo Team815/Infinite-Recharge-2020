@@ -24,7 +24,7 @@ public class BallMoveGroup {
         STOPPED
     };
 
-    private double m_stoppingDuration = 0.2;
+    private double m_stoppingDuration = 0;
     private final DigitalInput m_sensor;
     private final TalonSRX[] m_motors;
     private State m_state = State.STOPPED;

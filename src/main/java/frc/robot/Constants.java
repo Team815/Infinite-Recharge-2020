@@ -69,5 +69,10 @@ public final class Constants {
     public static final int SENSOR_BALL_MOVER_3 = 3;
     public static final int SENSOR_BALL_MOVER_4 = 4;
 
+    public static final int MOTOR_BALL_SHOOTER_0 = 6;
+    public static final int MOTOR_BALL_SHOOTER_1 = 7;
+
     public static final int MOTOR_BALL_PICKUP_SPINNER = 12;
+    
+    public static final int MOTOR_BALL_SHOOTER_FEEDER = 13;
 }
