@@ -162,7 +162,7 @@ public class SubsystemBallBelt extends SubsystemBase {
           
           //Use timer to make sure we don't loop forever
           m_timer.start();          
-          while (!m_ballMoveGroups[moveToPosition].seesBall() && m_timer.get() < 1);
+          while (!m_ballMoveGroups[moveToPosition].seesBall() && m_timer.get() < 2);
           m_timer.stop();
           m_timer.reset();
         }
