@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -42,10 +43,11 @@ public class SubsystemBallPickup extends SubsystemBase {
   public void periodic() {
   }
 
-  public void start() {    
+  public void start() {
     if (SubsystemBallBelt.readyForBallPickup()) {
       setSolendoids(Value.kForward);
       setSpinner(0.35);
+      NetworkTableInstance.getDefault().getTable("data").getEntry("ballPickup").setBoolean(true);
       SubsystemBallBelt.startBallPickup();
     }
   }
@@ -54,6 +56,7 @@ public class SubsystemBallPickup extends SubsystemBase {
     System.out.println(Integer.toBinaryString(Solenoid.getAll(30)));
     setSolendoids(Value.kReverse);
     setSpinner(0);
+    NetworkTableInstance.getDefault().getTable("data").getEntry("ballPickup").setBoolean(false);
     SubsystemBallBelt.stopBallPickup();
   }
 
