@@ -161,7 +161,8 @@ public class SubsystemBallBelt extends SubsystemBase {
           m_timer.reset();
         }
         else {
-          currentBallGroup.stop();
+          if (i > 0 || (i == 0 && !m_pickingUpBall))
+            currentBallGroup.stop();
         }
       }
       else { //Current Ball group does not see a ball
