@@ -46,7 +46,7 @@ public class SubsystemBallPickup extends SubsystemBase {
   public void start() {
     if (SubsystemBallBelt.readyForBallPickup()) {
       setSolendoids(Value.kForward);
-      setSpinner(0.35);
+      setSpinner(0.3);
       NetworkTableInstance.getDefault().getTable("data").getEntry("ballPickup").setBoolean(true);
       SubsystemBallBelt.startBallPickup();
     }

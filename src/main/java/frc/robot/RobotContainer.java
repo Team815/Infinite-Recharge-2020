@@ -12,6 +12,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import frc.robot.commands.CommandCenterShooter;
 import frc.robot.commands.CommandChangeMotorSpeed;
 import frc.robot.commands.CommandDrive;
 import frc.robot.commands.CommandRunBallBelt;
@@ -38,6 +39,7 @@ public class RobotContainer {
   private final SubsystemBallPickup m_subsystemBallPickup = new SubsystemBallPickup();
   private final SubsystemBallBelt m_subsystemBallBelt = new SubsystemBallBelt();
   private final SubsystemShooter m_subsystemShooter = new SubsystemShooter();
+  private final Camera m_camera = new Camera();
   private final CommandDrive m_commandDrive = new CommandDrive(
     m_subsystemDrive,
     () -> m_controller.getX(Hand.kLeft),
@@ -90,6 +92,7 @@ public class RobotContainer {
     //dpadUp.whenPressed(new CommandChangeMotorSpeed(true, m_subsystemShooter));
     //dpadDown.whenPressed(new CommandChangeMotorSpeed(false, m_subsystemShooter));
     triggerLeft.whenHeld(new CommandStartBallSpinner(m_subsystemBallPickup));
+    buttonY.whenPressed(new CommandCenterShooter(m_subsystemDrive, m_camera));
   }
 
 

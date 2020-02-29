@@ -44,7 +44,7 @@ public class SubsystemShooter extends SubsystemBase {
 
       //System.out.println(m_speed);
       //m_speed = NetworkTableInstance.getDefault().getTable("data").getEntry("speedShooter").getNumber(0.2).doubleValue() / 100;
-      setShooterVelocity(0.85);
+      setShooterVelocity(0.9);
     }
   }
 
@@ -91,7 +91,7 @@ public class SubsystemShooter extends SubsystemBase {
     System.out.println("Target speed: " + speed + ", Sensed speed: " + m_talon1.getSelectedSensorVelocity());
   }
 
-  private boolean readyToFire() { 
+  private boolean readyToFire() {
     return m_readyToFire;
   }
 }
