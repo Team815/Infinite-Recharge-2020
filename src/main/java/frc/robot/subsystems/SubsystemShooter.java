@@ -19,7 +19,7 @@ public class SubsystemShooter extends SubsystemBase {
   private TalonSRX m_talon1 = new TalonSRX(Constants.MOTOR_BALL_SHOOTER_0);
   private TalonSRX m_talon2 = new TalonSRX(Constants.MOTOR_BALL_SHOOTER_1);
   private VictorSPX m_shooter_feeder = new VictorSPX(Constants.MOTOR_BALL_SHOOTER_FEEDER);
-  private double m_speed = -23000;
+  private double m_speed = -25000;
   private boolean m_running = false;
   private boolean m_readyToFire = false;
 
