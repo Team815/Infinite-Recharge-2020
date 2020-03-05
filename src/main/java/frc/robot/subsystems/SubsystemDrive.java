@@ -9,6 +9,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,6 +19,8 @@ public class SubsystemDrive extends SubsystemBase {
 
   private static final double DEADZONE_THRESHOLD = 0.1;
   private static final double ACCELERATION_MAX = 0.01;
+
+  private static final AnalogGyro m_gyro = new AnalogGyro(Constants.SENSOR_GYRO_DRIVE);
 
   double m_speedHorizontal = 0;
   double m_speedVertical = 0;
@@ -38,7 +42,7 @@ public class SubsystemDrive extends SubsystemBase {
     m_speedVertical = calculateOuput(speedVertical, m_speedVertical);
     m_speedRotational = calculateOuput(speedRotational, m_speedRotational);
 
-    mecanumDrive.driveCartesian(m_speedHorizontal, m_speedVertical, m_speedRotational);
+    mecanumDrive.driveCartesian(m_speedHorizontal, m_speedVertical, m_speedRotational, -m_gyro.getAngle());
   }
 
   private static double calculateOuput(double input, double currentOutput) {

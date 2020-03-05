@@ -24,7 +24,7 @@ public class BallMoveGroup {
         STOPPED
     };
 
-    private double m_stoppingDuration = 0;
+    private double m_stoppingDuration = 1;
     private final DigitalInput m_sensor;
     private final TalonSRX[] m_motors;
     private State m_state = State.STOPPED;
@@ -48,19 +48,14 @@ public class BallMoveGroup {
         }
     }
 
-    public void stop() {
+    public void stop(double delay) {
         if (m_state == State.RUNNING) {
             m_state = State.STOPPING;
             m_timer.start();
-        } else if (m_state == State.STOPPING && m_timer.get() > m_stoppingDuration) {
+        } else if (m_state == State.STOPPING && m_timer.get() > delay) {
             m_state = State.STOPPED;
             set(0);
         }
-    }
-
-    public void setStoppingDuration(double duration)
-    {
-        m_stoppingDuration = duration;
     }
 
     private void set(double output) {

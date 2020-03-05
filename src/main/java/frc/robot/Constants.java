@@ -24,6 +24,8 @@ public final class Constants {
     public static final int MOTOR_DRIVE_REAR_LEFT = 9;
     public static final int MOTOR_DRIVE_FRONT_LEFT = 8;
 
+    public static final int SENSOR_GYRO_DRIVE = 0;
+
     // Xbox controller mappings
 
     public static final int CONTROLLER_BUTTON_A = 1;
@@ -73,6 +75,5 @@ public final class Constants {
     public static final int MOTOR_BALL_SHOOTER_1 = 7;
 
     public static final int MOTOR_BALL_PICKUP_SPINNER = 12;
-    
     public static final int MOTOR_BALL_SHOOTER_FEEDER = 13;
 }

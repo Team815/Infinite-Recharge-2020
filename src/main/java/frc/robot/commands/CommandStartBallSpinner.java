@@ -8,18 +8,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.SubsystemBallBelt;
 import frc.robot.subsystems.SubsystemBallPickup;
 
 public class CommandStartBallSpinner extends CommandBase {
 
   private final SubsystemBallPickup m_subsystemBallPickup;
+  private final SubsystemBallBelt m_subsystemBallBelt;
 
   /**
    * Creates a new CommandStartBallSpinner.
    */
-  public CommandStartBallSpinner(SubsystemBallPickup subsystemBallPickup) {
+  public CommandStartBallSpinner(SubsystemBallPickup subsystemBallPickup, SubsystemBallBelt subsystemBallBelt) {
     m_subsystemBallPickup = subsystemBallPickup;
+    m_subsystemBallBelt = subsystemBallBelt;
     addRequirements(subsystemBallPickup);
+    addRequirements(subsystemBallBelt);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -32,6 +36,7 @@ public class CommandStartBallSpinner extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_subsystemBallBelt.runAndPickup();
   }
 
   // Called once the command ends or is interrupted.

@@ -19,7 +19,7 @@ public class SubsystemShooter extends SubsystemBase {
   private TalonSRX m_talon1 = new TalonSRX(Constants.MOTOR_BALL_SHOOTER_0);
   private TalonSRX m_talon2 = new TalonSRX(Constants.MOTOR_BALL_SHOOTER_1);
   private VictorSPX m_shooter_feeder = new VictorSPX(Constants.MOTOR_BALL_SHOOTER_FEEDER);
-  private double m_speed = -25000;
+  private double m_speed = -33500;
   private boolean m_running = false;
   private boolean m_readyToFire = false;
 
@@ -41,10 +41,8 @@ public class SubsystemShooter extends SubsystemBase {
         SubsystemBallBelt.startAssistBallShooter();
         fireShooter();  //This will shoot the ball!
       }
-
-      //System.out.println(m_speed);
       //m_speed = NetworkTableInstance.getDefault().getTable("data").getEntry("speedShooter").getNumber(0.2).doubleValue() / 100;
-      setShooterVelocity(0.9);
+      setShooterVelocity(m_speed);
     }
   }
 
@@ -58,7 +56,7 @@ public class SubsystemShooter extends SubsystemBase {
 
   public void start() {
     //if (SubsystemBallBelt.readyToShoot()) {
-      setShooterVelocity(1);
+      setShooterVelocity(m_speed);
       m_running = true;
     //}
   }
@@ -83,12 +81,11 @@ public class SubsystemShooter extends SubsystemBase {
   }
 
   private void setShooterVelocity(double speed) {
-    m_talon1.set(ControlMode.PercentOutput, speed);
-    //m_talon1.set(ControlMode.Velocity, speed);
+    m_talon1.set(ControlMode.Velocity, speed);
 
-    m_readyToFire = m_talon1.getSelectedSensorVelocity() <= m_speed;
-    System.out.println("Ready to fire: " + m_readyToFire);
-    System.out.println("Target speed: " + speed + ", Sensed speed: " + m_talon1.getSelectedSensorVelocity());
+    m_readyToFire = m_talon1.getSelectedSensorVelocity() <= (m_speed + 500);
+    //System.out.println("Ready to fire: " + m_readyToFire);
+    //System.out.println("Target speed: " + speed + ", Sensed speed: " + m_talon1.getSelectedSensorVelocity());
   }
 
   private boolean readyToFire() {

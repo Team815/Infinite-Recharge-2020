@@ -44,12 +44,9 @@ public class SubsystemBallPickup extends SubsystemBase {
   }
 
   public void start() {
-    if (SubsystemBallBelt.readyForBallPickup()) {
-      setSolendoids(Value.kForward);
-      setSpinner(0.3);
-      NetworkTableInstance.getDefault().getTable("data").getEntry("ballPickup").setBoolean(true);
-      SubsystemBallBelt.startBallPickup();
-    }
+    setSolendoids(Value.kForward);
+    setSpinner(0.3);
+    NetworkTableInstance.getDefault().getTable("data").getEntry("ballPickup").setBoolean(true);
   }
 
   public void stop() {
@@ -57,7 +54,6 @@ public class SubsystemBallPickup extends SubsystemBase {
     setSolendoids(Value.kReverse);
     setSpinner(0);
     NetworkTableInstance.getDefault().getTable("data").getEntry("ballPickup").setBoolean(false);
-    SubsystemBallBelt.stopBallPickup();
   }
 
   private void setSpinner(double output){

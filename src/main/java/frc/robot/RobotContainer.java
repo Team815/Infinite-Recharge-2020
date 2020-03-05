@@ -91,7 +91,7 @@ public class RobotContainer {
     triggerRight.whenHeld(new CommandShoot(m_subsystemShooter));
     //dpadUp.whenPressed(new CommandChangeMotorSpeed(true, m_subsystemShooter));
     //dpadDown.whenPressed(new CommandChangeMotorSpeed(false, m_subsystemShooter));
-    triggerLeft.whenHeld(new CommandStartBallSpinner(m_subsystemBallPickup));
+    triggerLeft.whenHeld(new CommandStartBallSpinner(m_subsystemBallPickup, m_subsystemBallBelt));
     buttonY.whenPressed(new CommandCenterShooter(m_subsystemDrive, m_camera));
   }
 
