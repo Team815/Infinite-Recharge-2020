@@ -7,17 +7,17 @@
 
 package frc.robot;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import frc.robot.commands.CommandCenterShooter;
-import frc.robot.commands.CommandChangeMotorSpeed;
+import edu.wpi.first.wpilibj.drive.Vector2d;
+import frc.robot.commands.CommandRotate;
 import frc.robot.commands.CommandDrive;
+import frc.robot.commands.CommandDriveTo;
 import frc.robot.commands.CommandRunBallBelt;
 import frc.robot.commands.CommandShoot;
 import frc.robot.commands.CommandStartBallSpinner;
+import frc.robot.sensors.Camera;
 import frc.robot.subsystems.SubsystemBallBelt;
 import frc.robot.subsystems.SubsystemBallPickup;
 import frc.robot.subsystems.SubsystemDrive;
@@ -88,11 +88,16 @@ public class RobotContainer {
     final POVButton dpadRight = new POVButton(m_controller, Constants.CONTROLLER_DPAD_RIGHT);
     final POVButton dpadUpRight = new POVButton(m_controller, Constants.CONTROLLER_DPAD_UP_RIGHT);
 
-    triggerRight.whenHeld(new CommandShoot(m_subsystemShooter));
+    triggerRight.whenHeld(new CommandShoot(m_subsystemShooter, -1));
     //dpadUp.whenPressed(new CommandChangeMotorSpeed(true, m_subsystemShooter));
     //dpadDown.whenPressed(new CommandChangeMotorSpeed(false, m_subsystemShooter));
     triggerLeft.whenHeld(new CommandStartBallSpinner(m_subsystemBallPickup, m_subsystemBallBelt));
-    buttonY.whenPressed(new CommandCenterShooter(m_subsystemDrive, m_camera));
+    buttonY.whenPressed(new CommandRotate(m_subsystemDrive, () -> {
+      Vector2d coordinates = m_camera.getCoordinates();
+      return coordinates == null ? Double.NaN : -coordinates.x;
+    }, 0, 0.1));
+    buttonBumperLeft.whenPressed(() -> m_subsystemDrive.tortoiseMode());
+    buttonBumperRight.whenPressed(() -> m_subsystemDrive.hareMode());
   }
 
 
@@ -102,7 +107,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return null;
+    return new CommandShoot(m_subsystemShooter, 5)
+    .andThen(new CommandRotate(m_subsystemDrive, () -> m_subsystemDrive.getAngle(), 180, 0.2))
+    .andThen(new CommandDriveTo(m_subsystemDrive, 0, -0.2, 0, 1))
+    .andThen(new CommandRotate(m_subsystemDrive, () -> m_subsystemDrive.getAngle(), 0, 0.2));
   }
 }

@@ -7,37 +7,48 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Camera;
 import frc.robot.subsystems.SubsystemDrive;
 
-public class CommandCenterShooter extends CommandBase {
+public class CommandRotate extends CommandBase {
+  private static final double TIME_LIMIT = 10;
+
   private SubsystemDrive m_drive;
-  private Camera m_camera;
-  private PIDController pid = new PIDController(-0.013, 0, 0);
+  private DoubleSupplier m_supplier;
+  private double m_target;
+  private double m_maxSpeed;
+  private PIDController m_pid = new PIDController(0.02, 0, 0);
+  private Timer m_timer = new Timer();
   /**
    * Creates a new CommandCenterShooter.
    */
-  public CommandCenterShooter(SubsystemDrive drive, Camera camera) {
+  public CommandRotate(SubsystemDrive drive, DoubleSupplier supplier, double target, double maxSpeed) {
     m_drive = drive;
-    m_camera = camera;
+    m_supplier = supplier;
+    m_target = target;
+    m_maxSpeed = maxSpeed;
+    m_pid.setSetpoint(target);
     addRequirements(m_drive);
-    pid.setSetpoint(0);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Vector2d coordinates = m_camera.getCoordinates();
-    if (coordinates != null) {
-      double rotation = pid.calculate(coordinates.x);
+    double input = m_supplier.getAsDouble();
+    if (input != Double.NaN) {
+      System.out.println(input);
+      double rotation = m_pid.calculate(input);
+      rotation = Math.min(m_maxSpeed, Math.abs(rotation)) * Math.signum(rotation);
       m_drive.drive(0, 0, rotation);
     }
   }
@@ -50,7 +61,11 @@ public class CommandCenterShooter extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    Vector2d coordinates = m_camera.getCoordinates();
-    return coordinates == null ? true : Math.abs(coordinates.x) < 0.2;
+    if (m_timer.get() > TIME_LIMIT) {
+      return true;
+    }
+
+    double input = m_supplier.getAsDouble();
+    return input == Double.NaN ? true : Math.abs(m_target - input) < 0.2;
   }
 }

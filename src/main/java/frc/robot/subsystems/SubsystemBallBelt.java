@@ -118,14 +118,14 @@ public class SubsystemBallBelt extends SubsystemBase {
       if (emptySpaceFound) {
         m_ballMoveGroups[i].start();
       } else {
-        m_ballMoveGroups[i].stop(0);
+        m_ballMoveGroups[i].stop(0.1);
       }
     }
 
     if (emptySpaceFound) {
       ballMoveGroupFirst.start();
     } else {
-      ballMoveGroupFirst.stop(0);
+      ballMoveGroupFirst.stop(0.1);
     }
   }
 }

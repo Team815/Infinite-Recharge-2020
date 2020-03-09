@@ -18,13 +18,15 @@ import frc.robot.Constants;
 public class SubsystemDrive extends SubsystemBase {
 
   private static final double DEADZONE_THRESHOLD = 0.1;
-  private static final double ACCELERATION_MAX = 0.01;
 
   private static final AnalogGyro m_gyro = new AnalogGyro(Constants.SENSOR_GYRO_DRIVE);
 
-  double m_speedHorizontal = 0;
-  double m_speedVertical = 0;
-  double m_speedRotational = 0;
+  private double m_maxSpeed = 1;
+  private double m_accelerationMax = 0.01;
+
+  private double m_speedHorizontal = 0;
+  private double m_speedVertical = 0;
+  private double m_speedRotational = 0;
 
   MecanumDrive mecanumDrive = new MecanumDrive(
     new CANSparkMax(Constants.MOTOR_DRIVE_FRONT_LEFT, MotorType.kBrushless),
@@ -37,19 +39,41 @@ public class SubsystemDrive extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  public void driveManual(double speedHorizontal, double speedVertical, double speedRotational) {
+    drive(
+      calculateOuput(speedHorizontal, m_speedHorizontal),
+      calculateOuput(speedVertical, m_speedVertical),
+      calculateOuput(speedRotational, m_speedRotational));
+  }
+
   public void drive(double speedHorizontal, double speedVertical, double speedRotational) {
-    m_speedHorizontal = calculateOuput(speedHorizontal, m_speedHorizontal);
-    m_speedVertical = calculateOuput(speedVertical, m_speedVertical);
-    m_speedRotational = calculateOuput(speedRotational, m_speedRotational);
+    m_speedHorizontal = speedHorizontal;
+    m_speedVertical = speedVertical;
+    m_speedRotational = speedRotational;
 
     mecanumDrive.driveCartesian(m_speedHorizontal, m_speedVertical, m_speedRotational, -m_gyro.getAngle());
   }
 
-  private static double calculateOuput(double input, double currentOutput) {
+  private double calculateOuput(double input, double currentOutput) {
     input = Math.abs(input) < DEADZONE_THRESHOLD ? 0 : input;
-    double difference = input - currentOutput;
-    difference = Math.min(difference, ACCELERATION_MAX);
-    difference = Math.max(difference, -ACCELERATION_MAX);
+    double difference = (input * m_maxSpeed) - currentOutput;
+    difference = Math.min(difference, m_accelerationMax);
+    difference = Math.max(difference, -m_accelerationMax);
     return currentOutput + difference;
+  }
+
+  public void tortoiseMode() {
+    System.out.println("Tortoise");
+    m_maxSpeed = 0.1;
+    m_accelerationMax = 1;
+  }
+
+  public void hareMode() {
+    m_maxSpeed = 1;
+    m_accelerationMax = 0.02;
+  }
+
+  public double getAngle() {
+    return m_gyro.getAngle();
   }
 }

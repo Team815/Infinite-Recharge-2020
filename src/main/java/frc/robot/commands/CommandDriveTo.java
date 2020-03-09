@@ -7,43 +7,53 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SubsystemShooter;
+import frc.robot.subsystems.SubsystemDrive;
 
-public class CommandChangeMotorSpeed extends CommandBase {
-
-  private final double SPEED_STEP = 0.01;
-
-  boolean m_speedUp;
-  SubsystemShooter m_shooter;
+public class CommandDriveTo extends CommandBase {
+  SubsystemDrive m_drive;
+  double m_horizontal;
+  double m_vertical;
+  double m_rotation;
+  double m_time;
+  Timer m_timer;
 
   /**
-   * Creates a new CommandChangeMotorSpeed.
+   * Creates a new CommandDriveTo.
    */
-  public CommandChangeMotorSpeed(boolean speedUp, SubsystemShooter shooter) {
-    m_speedUp = speedUp;
-    m_shooter = shooter;
+  public CommandDriveTo(SubsystemDrive drive, double horizontal, double vertical, double rotation, double time) {
+    m_drive = drive;
+    m_horizontal = horizontal;
+    m_vertical = vertical;
+    m_rotation = rotation;
+    m_time = time;
+    m_timer = new Timer();
+    addRequirements(drive);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.changeMotorSpeedBy(m_speedUp ? SPEED_STEP : -SPEED_STEP);
+    m_timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_drive.drive(m_horizontal, m_vertical, m_rotation);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_drive.drive(0, 0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return m_timer.get() > m_time;
   }
 }

@@ -7,18 +7,23 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SubsystemShooter;
 
 public class CommandShoot extends CommandBase {
 
   SubsystemShooter m_shooter;
+  Timer m_timer;
+  double m_time;
 
   /**
    * Creates a new CommandShoot.
    */
-  public CommandShoot(SubsystemShooter shooter) {
+  public CommandShoot(SubsystemShooter shooter, double time) {
     m_shooter = shooter;
+    m_time = time;
+    m_timer = new Timer();
     addRequirements(shooter);
   }
 
@@ -26,6 +31,7 @@ public class CommandShoot extends CommandBase {
   @Override
   public void initialize() {
     m_shooter.start();
+    m_timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,6 +48,6 @@ public class CommandShoot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_time < 0 ? false : m_timer.get() > m_time;
   }
 }
