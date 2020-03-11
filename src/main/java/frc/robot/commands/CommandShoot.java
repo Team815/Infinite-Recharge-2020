@@ -13,9 +13,9 @@ import frc.robot.subsystems.SubsystemShooter;
 
 public class CommandShoot extends CommandBase {
 
-  SubsystemShooter m_shooter;
-  Timer m_timer;
-  double m_time;
+  private SubsystemShooter m_shooter;
+  private Timer m_timer;
+  private double m_time;
 
   /**
    * Creates a new CommandShoot.
@@ -30,13 +30,18 @@ public class CommandShoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.start();
+    m_shooter.startShooter();
     m_timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (m_shooter.readyToShoot()) {
+      m_shooter.startFeeder();
+    } else {
+      m_shooter.stopFeeder();
+    }
   }
 
   // Called once the command ends or is interrupted.

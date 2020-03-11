@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BallMoveGroup;
 import frc.robot.Constants;
@@ -18,37 +17,6 @@ import frc.robot.Constants;
 public class SubsystemBallBelt extends SubsystemBase {
 
   private static BallMoveGroup[] m_ballMoveGroups = new BallMoveGroup[5];
-  private static boolean m_pickingUpBall = false;
-  private static boolean m_shootingBall = false;
-  private Timer m_timer;
-
-  /**
-  * Use by SubsystemShooter to see if the Ball Belt is ready to shoot.
-  * Returns true if last ball position has a ball.
-  */
-  public static boolean readyToShoot() {
-    return m_ballMoveGroups[4].seesBall();
-  }
-
-  /**
-  * Use by SubsystemShooter to assist Shooter.
-  * Starts last ball position motor if it has a ball.
-  */
-  public static void startAssistBallShooter() {
-    if (m_ballMoveGroups[4].seesBall()) {
-      m_shootingBall = true;
-      m_ballMoveGroups[4].start();
-    }
-  }
-
-  /**
-  * Use by SubsystemShooter to stop assisting Shooter.
-  * Stops last ball position motor if it is running.
-  */
-  public static void stopAssistBallShooter() {
-    m_ballMoveGroups[4].stop(0);
-    m_shootingBall = false;
-  }
 
   /**
    * Creates a new BallBelt.
@@ -64,14 +32,11 @@ public class SubsystemBallBelt extends SubsystemBase {
     motor1.setInverted(true);
     motor3.setInverted(true);
 
-    m_ballMoveGroups[0] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_0, motor0);//, motor1);
-    m_ballMoveGroups[1] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_1, motor1);//, motor2);
-    m_ballMoveGroups[2] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_2, motor2);//, motor3);
-    m_ballMoveGroups[3] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_3, motor3);//, motor4);
-    //m_ballMoveGroups[3].setStoppingDuration(0.3);
+    m_ballMoveGroups[0] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_0, motor0);
+    m_ballMoveGroups[1] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_1, motor1);
+    m_ballMoveGroups[2] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_2, motor2);
+    m_ballMoveGroups[3] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_3, motor3);
     m_ballMoveGroups[4] = new BallMoveGroup(Constants.SENSOR_BALL_MOVER_4, motor4);
-
-    m_timer = new Timer();
   }
 
   public void run() {
@@ -79,9 +44,12 @@ public class SubsystemBallBelt extends SubsystemBase {
     sortBalls();
   }
 
-  public void runAndPickup() {
-    run();
+  public void startEntryMotor() {
     m_ballMoveGroups[0].start();
+  }
+
+  public void startExitMotor() {
+    m_ballMoveGroups[4].start();
   }
 
   private void printBallStatus() {
@@ -118,14 +86,23 @@ public class SubsystemBallBelt extends SubsystemBase {
       if (emptySpaceFound) {
         m_ballMoveGroups[i].start();
       } else {
-        m_ballMoveGroups[i].stop(0.1);
+        m_ballMoveGroups[i].stop(0);
       }
     }
 
     if (emptySpaceFound) {
       ballMoveGroupFirst.start();
     } else {
-      ballMoveGroupFirst.stop(0.1);
+      ballMoveGroupFirst.stop(0);
     }
+  }
+
+  public boolean isFull() {
+    for (BallMoveGroup ballMoveGroup : m_ballMoveGroups) {
+      if (!ballMoveGroup.seesBall()) {
+        return false;
+      }
+    }
+    return true;
   }
 }

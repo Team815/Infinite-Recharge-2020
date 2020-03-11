@@ -7,23 +7,23 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SubsystemBallBelt;
 import frc.robot.subsystems.SubsystemBallPickup;
 
 public class CommandStartBallSpinner extends CommandBase {
 
   private final SubsystemBallPickup m_subsystemBallPickup;
-  private final SubsystemBallBelt m_subsystemBallBelt;
+  private final BooleanSupplier m_beltFull;
 
   /**
    * Creates a new CommandStartBallSpinner.
    */
-  public CommandStartBallSpinner(SubsystemBallPickup subsystemBallPickup, SubsystemBallBelt subsystemBallBelt) {
+  public CommandStartBallSpinner(SubsystemBallPickup subsystemBallPickup, BooleanSupplier beltFull) {
     m_subsystemBallPickup = subsystemBallPickup;
-    m_subsystemBallBelt = subsystemBallBelt;
+    m_beltFull = beltFull;
     addRequirements(subsystemBallPickup);
-    addRequirements(subsystemBallBelt);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -36,7 +36,6 @@ public class CommandStartBallSpinner extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystemBallBelt.runAndPickup();
   }
 
   // Called once the command ends or is interrupted.
@@ -48,6 +47,6 @@ public class CommandStartBallSpinner extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_beltFull.getAsBoolean();
   }
 }

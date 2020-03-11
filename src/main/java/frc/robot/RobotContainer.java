@@ -51,7 +51,10 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_subsystemDrive.setDefaultCommand(m_commandDrive);
-    m_subsystemBallBelt.setDefaultCommand(new CommandRunBallBelt(m_subsystemBallBelt));
+    m_subsystemBallBelt.setDefaultCommand(new CommandRunBallBelt(
+      m_subsystemBallBelt,
+      () -> m_subsystemBallPickup.isRunning(),
+      () -> m_subsystemShooter.readyToShoot()));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -89,9 +92,7 @@ public class RobotContainer {
     final POVButton dpadUpRight = new POVButton(m_controller, Constants.CONTROLLER_DPAD_UP_RIGHT);
 
     triggerRight.whenHeld(new CommandShoot(m_subsystemShooter, -1));
-    //dpadUp.whenPressed(new CommandChangeMotorSpeed(true, m_subsystemShooter));
-    //dpadDown.whenPressed(new CommandChangeMotorSpeed(false, m_subsystemShooter));
-    triggerLeft.whenHeld(new CommandStartBallSpinner(m_subsystemBallPickup, m_subsystemBallBelt));
+    triggerLeft.whenHeld(new CommandStartBallSpinner(m_subsystemBallPickup, () -> m_subsystemBallBelt.isFull()));
     buttonY.whenPressed(new CommandRotate(m_subsystemDrive, () -> {
       Vector2d coordinates = m_camera.getCoordinates();
       return coordinates == null ? Double.NaN : -coordinates.x;

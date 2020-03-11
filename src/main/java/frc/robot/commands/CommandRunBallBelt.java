@@ -7,16 +7,24 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SubsystemBallBelt;
 
 public class CommandRunBallBelt extends CommandBase {
+
   SubsystemBallBelt m_subsystemBallBelt;
+  BooleanSupplier m_pickupRunning;
+  BooleanSupplier m_shooterReady;
+
   /**
    * Creates a new CommandMoveBallBelt.
    */
-  public CommandRunBallBelt(SubsystemBallBelt subsystemBallBelt) {
+  public CommandRunBallBelt(SubsystemBallBelt subsystemBallBelt, BooleanSupplier pickupRunning, BooleanSupplier shooterReady) {
     m_subsystemBallBelt = subsystemBallBelt;
+    m_pickupRunning = pickupRunning;
+    m_shooterReady = shooterReady;
     addRequirements(subsystemBallBelt);
   }
 
@@ -29,6 +37,14 @@ public class CommandRunBallBelt extends CommandBase {
   @Override
   public void execute() {
     m_subsystemBallBelt.run();
+
+    if (m_pickupRunning.getAsBoolean()) {
+      m_subsystemBallBelt.startEntryMotor();
+    }
+
+    if (m_shooterReady.getAsBoolean()) {
+      m_subsystemBallBelt.startExitMotor();
+    }
   }
 
   // Called once the command ends or is interrupted.

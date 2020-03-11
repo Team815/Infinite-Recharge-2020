@@ -56,6 +56,10 @@ public class SubsystemBallPickup extends SubsystemBase {
     NetworkTableInstance.getDefault().getTable("data").getEntry("ballPickup").setBoolean(false);
   }
 
+  public boolean isRunning() {
+    return spinner.getMotorOutputPercent() != 0;
+  }
+
   private void setSpinner(double output){
     spinner.set(ControlMode.PercentOutput, output);
   }
