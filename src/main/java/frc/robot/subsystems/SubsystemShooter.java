@@ -48,6 +48,7 @@ public class SubsystemShooter extends SubsystemBase {
   }
 
   public boolean readyToShoot() {
+    //System.out.println(m_shooter1.getSelectedSensorVelocity());
     return m_shooter1.getSelectedSensorVelocity() <= (m_speedShooter + 500);
   }
 

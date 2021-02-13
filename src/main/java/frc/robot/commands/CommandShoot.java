@@ -38,6 +38,7 @@ public class CommandShoot extends CommandBase {
   @Override
   public void execute() {
     if (m_shooter.readyToShoot()) {
+      System.out.println("Ready to shoot");
       m_shooter.startFeeder();
     } else {
       m_shooter.stopFeeder();
